@@ -100,7 +100,7 @@ Based on the keys I have been able to observe, at the date I am writing this (20
 *They are all case-sensitive.*
 
 ## Author 
-**Azaël MARTIN** - [n3rada](https://github.com/n3rada)
+**[Azaël MARTIN](https://www.linkedin.com/in/n3rada)** - [n3rada](https://github.com/n3rada)
 
 ## License
 Rainbox is licensed under the terms of the GPL3 Licence and is available for free - see the [LICENSE](LICENSE) file for details.

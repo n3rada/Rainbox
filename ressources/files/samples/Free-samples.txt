@@ -1,4 +1,4 @@
-F459-984E-2C|Fiber_Optic
-5vkv-9qk7-3nq9-v6kc-qb5m-5n|Fiber_Optic
-diss-ipar-es4v-alla-dum4-aere-s4ca-nisi|Fiber_Optic
-curi-osi.-jact-aras-adni-hila-ns3j-ugar-ius4|ADSL
+F459984E2C|Fiber_Optic
+5vkv9qk73nq9v6kcqb5m5n|Fiber_Optic
+dissipares4-vallandum4-aeres4-canisi|Fiber_Optic # les tirets comptent
+curiosi.-jactaras-adnihilans3-jugarius4|ADSL

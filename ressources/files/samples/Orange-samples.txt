@@ -1,3 +1,3 @@
-66AF-AE79-192F-488E-C875-820E-3E|ADSL
-CSyw-A2Ug-2gZc-5ujy-sU|Fiber_Optic
-FVoX-kxNU-4Urh-tLiZ-Fq|Fiber_Optic
+66AFAE79192F488EC875820E3E|ADSL
+CSywA2Ug2gZc5ujysU|Fiber_Optic
+FVoXkxNU4UrhtLiZFq|Fiber_Optic

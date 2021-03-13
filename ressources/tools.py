@@ -9,46 +9,52 @@ import math
 
 THIS_FOLDER = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-DIRECTORY_FILES = os.path.join(THIS_FOLDER,"ressources/files/")
+DIRECTORY_FILES = os.path.join(THIS_FOLDER, "ressources/files/")
 
-DIRECTORY_SAMPLES = os.path.join(DIRECTORY_FILES,"samples/")
-DIRECTORY_WORDLISTS = os.path.join(DIRECTORY_FILES,"wordlists/")
+DIRECTORY_SAMPLES = os.path.join(DIRECTORY_FILES, "samples/")
+DIRECTORY_WORDLISTS = os.path.join(DIRECTORY_FILES, "wordlists/")
 
-DIRECTORY_BUFFER = os.path.join(DIRECTORY_WORDLISTS,"buffer/")
-DIRECTORY_FRAGMENTS = os.path.join(DIRECTORY_WORDLISTS,"fragments/")
-DIRECTORY_HEXA = os.path.join(DIRECTORY_WORDLISTS,"hexa/")
-DIRECTORY_ALPHA = os.path.join(DIRECTORY_WORDLISTS,"alpha/")
+DIRECTORY_BUFFER = os.path.join(DIRECTORY_WORDLISTS, "buffer/")
+DIRECTORY_FRAGMENTS = os.path.join(DIRECTORY_WORDLISTS, "fragments/")
+DIRECTORY_HEXA = os.path.join(DIRECTORY_WORDLISTS, "hexa/")
+DIRECTORY_ALPHA = os.path.join(DIRECTORY_WORDLISTS, "alpha/")
+
 
 def readableDigits(s):
     try:
         return format(int(s), ',').replace(',', '.')
     except:
         return s
-    
-isStringTrue = lambda s: s.lower() in ['true', '1', 't', 'y', 'yes', 'yeah', 'yup', 'certainly', 'uh-huh']
+
+
+isStringTrue = lambda s: s.lower(
+) in ['true', '1', 't', 'y', 'yes', 'yeah', 'yup', 'certainly', 'uh-huh']
 
 ##########################################
 ##########################################
 import itertools
 from typing import Iterator
 
-def createFragments(inputList,letters:int=4) -> Iterator : 
+
+def createFragments(inputList, letters: int = 4) -> Iterator:
     """
     Generator to create fragments of number of letters from inputList. 
     """
-    for elt in itertools.product(inputList,repeat=letters):
+    for elt in itertools.product(inputList, repeat=letters):
         # If the fragment contains more than maxRep letters
         frag = ''.join(elt)
 
         # No words with 3 times the same letter / number
         regex = r"^(?:(\w)\1?(?!\1))+$"
-        if re.match(regex,frag):
+        if re.match(regex, frag):
             yield frag
         else:
             continue
 
+
 ##########################################
 ##########################################
+
 
 def getInt(default=1, expected="choices"):
     print(f"Enter {expected} ({default} by default):")
@@ -60,18 +66,20 @@ def getInt(default=1, expected="choices"):
         else:
             return int(i)
 
-def isHexa(string:str):
+
+def isHexa(string: str):
     """
     Check if a string is in hexadecimal or not
     """
     for ch in string:
-        
+
         if ((ch < '0' or ch > '9') and (ch < 'A' or ch > 'F')):
             return False
-    
+
     return True
 
-def isPunctuated(s:str):
+
+def isPunctuated(s: str):
     """
     Check if a string contains punctuations.
     """
@@ -82,7 +90,7 @@ def isPunctuated(s:str):
     return False
 
 
-def percentageMatch(seq1:str,seq2:str):
+def percentageMatch(seq1: str, seq2: str):
     """
     Output percentage of exact matching between two strings of same length.
     """
@@ -91,27 +99,30 @@ def percentageMatch(seq1:str,seq2:str):
     idem = 0
     total = len(seq1)
 
-    for char1, char2 in zip(seq1,seq2):
+    for char1, char2 in zip(seq1, seq2):
         if char1 == char2:
-            idem +=1
+            idem += 1
         else:
             continue
-    
+
     percentage = float("%.2f" % ((idem / total) * 100))
 
     return percentage
 
-def arrangement(n:int,p:int):
+
+def arrangement(n: int, p: int):
     """
     Return permutation https://en.wikipedia.org/wiki/Permutation#k-permutations_of_n numbers.
     """
-    
-    return int(math.factorial(n)/math.factorial(n-p))
+
+    return int(math.factorial(n) / math.factorial(n - p))
+
 
 ##########################################
 ##########################################
 
-def clear(withAscii:bool=True):
+
+def clear(withAscii: bool = True):
     """
     Clearing the screen.
     """
@@ -121,8 +132,7 @@ def clear(withAscii:bool=True):
         os.system("clear")
 
     if withAscii:
-        print(
-                """
+        print("""
                                         ██████╗  █████╗ ██╗███╗   ██╗██████╗  ██████╗ ██╗  ██╗
                                         ██╔══██╗██╔══██╗██║████╗  ██║██╔══██╗██╔═══██╗╚██╗██╔╝
                                         ██████╔╝███████║██║██╔██╗ ██║██████╔╝██║   ██║ ╚███╔╝ 
@@ -131,8 +141,7 @@ def clear(withAscii:bool=True):
                                         ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝
                                                     A generator of wifi router keys
                                                             Author: n3rada
-                """
-            )
+                """)
 
 
 def countLines(file_path):
@@ -148,12 +157,13 @@ def countLines(file_path):
     return count
 
 
-def rmFile(name:str, directory=DIRECTORY_FILES):
+def rmFile(name: str, directory=DIRECTORY_FILES):
     """Remove named file."""
     try:
-        os.remove(directory+name)
+        os.remove(directory + name)
     except FileNotFoundError:
         pass
+
 
 def whatInThere(directory=DIRECTORY_FILES):
     """
@@ -161,47 +171,49 @@ def whatInThere(directory=DIRECTORY_FILES):
     """
     return [f for f in os.listdir(directory)]
 
-def isStringInFile(fullPath:str,string:str):
+
+def isStringInFile(fullPath: str, string: str):
     """
     Return tuple saying if string is into the file and in which line.
     """
     lines = 1
-    with open(fullPath,'r') as f:
+    with open(fullPath, 'r') as f:
         for line in f:
             if string in line:
-                return (True,lines)
+                return (True, lines)
             else:
                 lines += 1
-        
-        return (False,lines)
-            
+
+        return (False, lines)
+
+
 def eraseAllFromDir(directory=DIRECTORY_BUFFER):
     """
     Erase all files in given directory (default: buffer dir)
     """
     for f in whatInThere(directory):
-        rmFile(name=f,directory=directory)
-    
+        rmFile(name=f, directory=directory)
 
-def mergeFiles(fullNameNew:str,filenames:list):
+
+def mergeFiles(fullNameNew: str, filenames: list):
     """
     Merge all files "filenames" from directory in a new file.
     """
     import shutil
-    with open(fullNameNew,"ab") as outputF:
+    with open(fullNameNew, "ab") as outputF:
         for file in filenames:
-            with open(file,"rb") as inputF:
-                shutil.copyfileobj(inputF,outputF)
+            with open(file, "rb") as inputF:
+                shutil.copyfileobj(inputF, outputF)
                 os.remove(file)
-    
 
-def mergeAllFiles(newFileFullName:str,filenames:list):
+
+def mergeAllFiles(newFileFullName: str, filenames: list):
     """
     Merge all files "filenames" from directory in a new file and remove duplicates.
     """
     ### Merge all
     merge = DIRECTORY_BUFFER + "-MERGED.txt"
-    with open(merge,"w") as outfile:
+    with open(merge, "w") as outfile:
         for name in filenames:
             with open(name) as infile:
                 outfile.write(infile.read())
@@ -210,8 +222,8 @@ def mergeAllFiles(newFileFullName:str,filenames:list):
     count = 0
     lines_seen = set()
 
-    with open(newFileFullName,"a") as output_file:
-        for each_line in open(merge,"r"):
+    with open(newFileFullName, "a") as output_file:
+        for each_line in open(merge, "r"):
             if each_line not in lines_seen:
                 output_file.write(each_line)
                 lines_seen.add(each_line)
@@ -220,37 +232,40 @@ def mergeAllFiles(newFileFullName:str,filenames:list):
     print(f"\nAfter merging, {count} of the generated keys are duplicates.\n")
 
 
-
-def isFileHere(fullPath:str):
+def isFileHere(fullPath: str):
     """Return if given name file's is here or is not."""
     return os.path.isfile(fullPath)
 
-def handleDirectory(dirName:str, directory=DIRECTORY_FILES):
-    """ If given directory doesn't exist, then create it. """
-    if not os.path.exists(directory+dirName):
-        os.makedirs(directory+dirName)
 
-def writeVarToFile(var:object, name:str, directory=DIRECTORY_FILES):
+def handleDirectory(dirName: str, directory=DIRECTORY_FILES):
+    """ If given directory doesn't exist, then create it. """
+    if not os.path.exists(directory + dirName):
+        os.makedirs(directory + dirName)
+
+
+def writeVarToFile(var: object, name: str, directory=DIRECTORY_FILES):
     """Write given variable into a file with variable name"""
     # r+ for reading and writing
-    name=directory+name
+    name = directory + name
     with open(name, "w+") as f:
         f.truncate(0)
         f.write(f"{var}")
 
     return var
 
-def extractVarFromFile(fileName:str, directory=DIRECTORY_FILES):
+
+def extractVarFromFile(fileName: str, directory=DIRECTORY_FILES):
     """Extract variable contenant's from file."""
     import ast
-    with open(directory+fileName, "r+") as f:
-        contents=f.read()
+    with open(directory + fileName, "r+") as f:
+        contents = f.read()
         try:
             extracted = ast.literal_eval(contents)
         except Exception:
             extracted = contents
 
     return extracted
+
 
 def mergedSamples():
     """
@@ -261,14 +276,15 @@ def mergedSamples():
     for file in whatInThere(DIRECTORY_SAMPLES):
 
         file = DIRECTORY_SAMPLES + file
-        
-        with open(file,"r") as f:
-            
+
+        with open(file, "r") as f:
+
             for line in f:
                 line = line.strip().split(sep="|")[0]
                 merged.append(''.join([elt.upper() for elt in line]))
 
     return merged
+
 
 def mergedSamplesIn4():
     """
@@ -281,18 +297,20 @@ def mergedSamplesIn4():
 
         for toAdd in elt:
             merged4.append(toAdd)
-    
+
     return merged4
-        
+
+
 ##########################################
 ##########################################
 
 from math import floor
 
-numberOf4Fragments = lambda i : floor(i/4)
-numberOfCharRemaining = lambda i : i%4
+numberOf4Fragments = lambda i: floor(i / 4)
+numberOfCharRemaining = lambda i: i % 4
 
-def handleFragments(fragName:str):
+
+def handleFragments(fragName: str):
     """
     Because generators are like ticker tapes, call them when you need them.
 
@@ -303,7 +321,7 @@ def handleFragments(fragName:str):
     import string
 
     # "FRAG_4-up-True" => ("FRAG_4","up","True")
-    fragName,case,punctuation = fragName.split("-")
+    fragName, case, punctuation = fragName.split("-")
 
     fragName = fragName.upper()
     case = case.lower()
@@ -316,44 +334,46 @@ def handleFragments(fragName:str):
 
     if fragName == "FRAG_2_HEXA":
         if case == "low":
-            return createFragments(base+'abcdef',letters=2)
+            return createFragments(base + 'abcdef', letters=2)
         elif case == "up":
-            return createFragments(base+'ABCDEF',letters=2)
+            return createFragments(base + 'ABCDEF', letters=2)
         elif case == "mix":
-            return createFragments(string.hexdigits,letters=2)
+            return createFragments(string.hexdigits, letters=2)
 
     elif fragName == "FRAG_4_HEXA":
         if case == "low":
-            return createFragments(base+'abcdef',letters=4)
+            return createFragments(base + 'abcdef', letters=4)
         elif case == "up":
-            return createFragments(base+'ABCDEF',letters=4)
+            return createFragments(base + 'ABCDEF', letters=4)
         elif case == "mix":
-            return createFragments(string.hexdigits,letters=4)
+            return createFragments(string.hexdigits, letters=4)
 
     elif fragName == "FRAG_2_ALPHA":
         if case == "low":
-            return createFragments(base+string.ascii_lowercase,letters=2)
+            return createFragments(base + string.ascii_lowercase, letters=2)
         elif case == "up":
-            return createFragments(base+string.ascii_uppercase,letters=2)
+            return createFragments(base + string.ascii_uppercase, letters=2)
         elif case == "mix":
-            return createFragments(base+string.ascii_letters,letters=2)
-        
+            return createFragments(base + string.ascii_letters, letters=2)
+
     elif fragName == "FRAG_4_ALPHA":
         if case == "low":
-            return createFragments(base+string.ascii_lowercase,letters=4)
+            return createFragments(base + string.ascii_lowercase, letters=4)
         elif case == "up":
-            return createFragments(base+string.ascii_uppercase,letters=4)
+            return createFragments(base + string.ascii_uppercase, letters=4)
         elif case == "mix":
-            return createFragments(base+string.ascii_letters,letters=4)
+            return createFragments(base + string.ascii_letters, letters=4)
 
-def choose2Fragments(fragL,stockList=[]) -> tuple:
+
+def choose2Fragments(fragL, stockList=[]) -> tuple:
     """
     Return two fragments from given frag list's according to previous choosen words.
     """
 
-    word1, word2 = rd.choice(fragL),rd.choice(fragL)
-    while (word1 in stockList or word2 in stockList) or (word1.isnumeric() and word2.isnumeric()):
-        word1, word2 = rd.choice(fragL),rd.choice(fragL)
+    word1, word2 = rd.choice(fragL), rd.choice(fragL)
+    while (word1 in stockList
+           or word2 in stockList) or (word1.isnumeric() and word2.isnumeric()):
+        word1, word2 = rd.choice(fragL), rd.choice(fragL)
 
     # Never two digital fragments that follow each other
     try:
@@ -363,9 +383,10 @@ def choose2Fragments(fragL,stockList=[]) -> tuple:
     except IndexError:
         pass
 
-    return word1,word2
+    return word1, word2
 
-def choose1Fragment(fragL,stockList=[]) -> str:
+
+def choose1Fragment(fragL, stockList=[]) -> str:
     """
     Return one fragment from given frag list's according to previous choosen words.
     """
@@ -385,9 +406,7 @@ def choose1Fragment(fragL,stockList=[]) -> str:
     return word
 
 
-
-
-def generateKey(length:int,fragments:list):
+def generateKey(length: int, fragments: list):
     """
     This function will be called by all processors once for generate key.
     """
@@ -407,7 +426,7 @@ def generateKey(length:int,fragments:list):
     while count4 != frag4:
 
         if (count4 + 2) < frag4:
-            word1,word2 = choose2Fragments(fragL4,stockList=alreadyPickedUp)
+            word1, word2 = choose2Fragments(fragL4, stockList=alreadyPickedUp)
 
             alreadyPickedUp.append(word1)
             alreadyPickedUp.append(word2)
@@ -415,48 +434,52 @@ def generateKey(length:int,fragments:list):
             finalWord += word1 + word2
 
             #print("Adding 2 frag4.")
-            count4+=2
-        
+            count4 += 2
+
         else:
-            word = choose1Fragment(fragL4,stockList=alreadyPickedUp)
+            word = choose1Fragment(fragL4, stockList=alreadyPickedUp)
             alreadyPickedUp.append(word)
 
             finalWord += word
 
             #print("Adding 1 frag4.")
-            count4+=1
+            count4 += 1
 
     if others:
 
         countO = 0
         while countO != others:
             # if other = 2 => adding one frag2 !
-            if others==2:
-                word = choose1Fragment(fragL2,stockList=alreadyPickedUp)
+            if others == 2:
+                word = choose1Fragment(fragL2, stockList=alreadyPickedUp)
 
                 alreadyPickedUp.append(word)
 
                 finalWord += word
 
                 #print("Adding 1 frag2.")
-                countO+=2
+                countO += 2
             else:
-                #other = 3 => adding one frag4 and cut the last char !
-                word = choose1Fragment(fragL4,stockList=alreadyPickedUp)
-                word = word[:-1]
+                word = choose1Fragment(fragL4, stockList=alreadyPickedUp)
+
+                if others == 3:
+                    word = word[:-1]
+                elif others == 1:
+                    word = word[0]
 
                 alreadyPickedUp.append(word)
 
                 finalWord += word
 
                 #print("Adding 1 cutted frag4.")
-                countO+=1
+                countO += 1
 
     return finalWord
 
-def infiniteKeysGenerator(length:int,fragments:list):
+
+def infiniteKeysGenerator(length: int, fragments: list):
     while True:
-        yield generateKey(length,fragments)
+        yield generateKey(length, fragments)
 
 
 def init_worker():
@@ -464,145 +487,179 @@ def init_worker():
     signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 
-
-def workerWriter(fileName:str,fragList:list,keySize:int):
+def workerWriter(fileName: str, fragList: list, keySize: int):
     """
     Infinitly add keys to given file.
     """
-    with open(fileName,"w+") as f:
+    with open(fileName, "w+") as f:
         try:
-            for key in infiniteKeysGenerator(length=keySize,fragments=fragList):
+            for key in infiniteKeysGenerator(length=keySize,
+                                             fragments=fragList):
                 f.write(f"{key}\n")
         except KeyboardInterrupt:
             f.close()
 
-def multiprocWriter(cores:int,fragName:str,keySize:int,fragmentList:list,keyToFind:str,possibilities:int):
-        import multiprocessing as mp
-        
-        poule = mp.Pool(cores,init_worker)
 
-        #############
-        type = fragName.split("-")[0].split("_")[-1]
+def multiprocWriter(cores: int, fragName: str, keySize: int,
+                    fragmentList: list, keyToFind: str, possibilities: int):
+    import multiprocessing as mp
 
-        if type == "HEXA":
-            directory = DIRECTORY_HEXA
-        else:
-            directory = DIRECTORY_ALPHA
+    poule = mp.Pool(cores, init_worker)
 
-        
-        name = fragName.split("_")[-1] + "-" + str(keySize) + "-keys"
-        bufferName = DIRECTORY_BUFFER + "buffer"
-        finalName = directory + name + ".txt"
-        ##############
+    #############
+    type = fragName.split("-")[0].split("_")[-1]
 
-        data = [(f"{bufferName}-{i}.txt",fragmentList,keySize)  for i in range(cores)]
+    if type == "HEXA":
+        directory = DIRECTORY_HEXA
+    else:
+        directory = DIRECTORY_ALPHA
 
-        print("\n\t\t\t\t  --> Use keyboard interrupt command to stop the generating process <--")
-        
-        starting = time.time()
-        try:
-            poule.starmap(workerWriter,data)
+    name = fragName.split("_")[-1] + "-" + str(keySize) + "-keys"
+    bufferName = DIRECTORY_BUFFER + "buffer"
+    finalName = directory + name + ".txt"
+    ##############
 
-        except KeyboardInterrupt:
+    data = [(f"{bufferName}-{i}.txt", fragmentList, keySize)
+            for i in range(cores)]
 
-            poule.terminate()
-            poule.close()
-            poule.join()
+    print(
+        "\n\t\t\t\t  --> Use keyboard interrupt command to stop the generating process <--"
+    )
 
-            clear(withAscii=True)
-            print("Interruption intercepted ! Wait for the program to process the necessary information...\n")
+    starting = time.time()
+    try:
+        poule.starmap(workerWriter, data)
 
-            finishing = time.time()
-            elapsed = finishing - starting
-        
-            previousLines = 0
-            if isFileHere(fullPath=finalName):
-                previousLines = countLines(file_path=finalName)
+    except KeyboardInterrupt:
 
-            mergeFiles(finalName,[f"{bufferName}-{i}.txt"  for i in range(cores)])
-            eraseAllFromDir(directory=DIRECTORY_BUFFER)
-            
-            total = countLines(file_path=finalName)
-            lines = total - previousLines
-            keysPerSeconds = floor(lines/elapsed)
+        poule.terminate()
+        poule.close()
+        poule.join()
 
-            if keyToFind:
-                isInFile, line = isStringInFile(finalName,keyToFind)
+        clear(withAscii=True)
+        print(
+            "Interruption intercepted ! Wait for the program to process the necessary information...\n"
+        )
 
-                if isInFile:
-                    print(f"You key ({keyToFind}) have been found during the generating process !")
-                    print(f"It's at line {readableDigits(line)} into the file {finalName}.")
-                else:
-                    print(f"Among all {readableDigits(line)} keys of the file, no key like yours appears...")
+        finishing = time.time()
+        elapsed = finishing - starting
 
-            timeMesure = datetime.timedelta(seconds=elapsed)
-            
+        previousLines = 0
+        if isFileHere(fullPath=finalName):
+            previousLines = countLines(file_path=finalName)
 
-            gigas = os.path.getsize(finalName)/(1024*1024*1024)
+        mergeFiles(finalName, [f"{bufferName}-{i}.txt" for i in range(cores)])
+        eraseAllFromDir(directory=DIRECTORY_BUFFER)
 
-            keysPerGiga = floor(line / gigas)
+        total = countLines(file_path=finalName)
+        lines = total - previousLines
+        keysPerSeconds = floor(lines / elapsed)
 
-            print(f"\nEach Giga represents {readableDigits(keysPerGiga)} keys.")
-            print(f"Approximately {readableDigits(keysPerSeconds)} keys were generated per second.")
-            print(f"{readableDigits(lines)} keys have been added in {timeMesure} to the {readableDigits(previousLines)} keys already present into the wordlist.")
-            print(f"For a total of {readableDigits(total)} keys availables into the {gigas} Gigabyte wordlist.\n")
+        if keyToFind:
+            isInFile, line = isStringInFile(finalName, keyToFind)
 
-            if isinstance(possibilities,int):
-                timeOfCalc = (possibilities/keysPerSeconds)
+            if isInFile:
+                print(
+                    f"You key ({keyToFind}) have been found during the generating process !"
+                )
+                print(
+                    f"It's at line {readableDigits(line)} into the file {finalName}."
+                )
+            else:
+                print(
+                    f"Among all {readableDigits(line)} keys of the file, no key like yours appears..."
+                )
 
-                try:
-                    timeF = datetime.timedelta(seconds=timeOfCalc)
-                except OverflowError:
-                    timeF = (timeOfCalc / 31536000) / 100 # centuries
-                    timeF = f"{timeF} centuries"
+        timeMesure = datetime.timedelta(seconds=elapsed)
 
-                print(f"Thus, you would need a {possibilities/keysPerGiga} Gigabyte wordlist to have all the possibilities.")
-                print(f"This is equivalent to {timeF} of calculation with this power.\n")
+        gigas = os.path.getsize(finalName) / (1024 * 1024 * 1024)
+
+        keysPerGiga = floor(line / gigas)
+
+        print(f"\nEach Giga represents {readableDigits(keysPerGiga)} keys.")
+        print(
+            f"Approximately {readableDigits(keysPerSeconds)} keys were generated per second."
+        )
+        print(
+            f"{readableDigits(lines)} keys have been added in {timeMesure} to the {readableDigits(previousLines)} keys already present into the wordlist."
+        )
+        print(
+            f"For a total of {readableDigits(total)} keys availables into the {gigas} Gigabyte wordlist.\n"
+        )
+
+        if isinstance(possibilities, int):
+            timeOfCalc = (possibilities / keysPerSeconds)
+
+            try:
+                timeF = datetime.timedelta(seconds=timeOfCalc)
+            except OverflowError:
+                timeF = (timeOfCalc / 31536000) / 100  # centuries
+                timeF = f"{timeF} centuries"
+
+            print(
+                f"Thus, you would need a {possibilities/keysPerGiga} Gigabyte wordlist to have all the possibilities."
+            )
+            print(
+                f"This is equivalent to {timeF} of calculation with this power.\n"
+            )
+
+        sys.exit(0)
 
 
-            sys.exit(0)
-    
-
-def consoleWriter(keySize:int,fragmentList:list,keyToFind:str):
+def consoleWriter(keySize: int, fragmentList: list, keyToFind: str):
     starting = time.time()
     count = 0
 
     try:
         if not keyToFind:
-            for key in infiniteKeysGenerator(length=keySize,fragments=fragmentList):
+            for key in infiniteKeysGenerator(length=keySize,
+                                             fragments=fragmentList):
                 print(key)
                 count += 1
         else:
-            print(f"The generator will generate keys until he finds yours: {keyToFind}")
-            print(f"Only the keys corresponding to more than 50% with yours will be displayed.")
-            print(f"The generation above is infinite, use the keyboard interrupt to stop it.")
- 
-            for key in infiniteKeysGenerator(length=keySize,fragments=fragmentList):
-                match = percentageMatch(key,keyToFind)
-                count +=1
+            print(
+                f"The generator will generate keys until he finds yours: {keyToFind}"
+            )
+            print(
+                f"Only the keys corresponding to more than 50% with yours will be displayed."
+            )
+            print(
+                f"The generation above is infinite, use the keyboard interrupt to stop it."
+            )
+
+            for key in infiniteKeysGenerator(length=keySize,
+                                             fragments=fragmentList):
+                match = percentageMatch(key, keyToFind)
+                count += 1
 
                 if key == keyToFind:
                     print(f"{key} =/= {keyToFind} | Matching : {match}")
 
                     raise KeyboardInterrupt
                 else:
-                    if match > 50 :
+                    if match > 50:
                         print(f"{key} =/= {keyToFind} | Matching : {match}")
-            
+
     except KeyboardInterrupt:
         #clear()
         ended = time.time()
         elapsed = ended - starting
 
-        keysPerSeconds = floor(count/elapsed)
+        keysPerSeconds = floor(count / elapsed)
 
         timeMesure = datetime.timedelta(seconds=elapsed)
         print(f"\n{timeMesure} elapsed !")
-        print(f"Approximately {readableDigits(keysPerSeconds)} keys were generated per second (with one core).")
+        print(
+            f"Approximately {readableDigits(keysPerSeconds)} keys were generated per second (with one core)."
+        )
         sys.exit(0)
 
 
-def writer(keySize:int,cores:int,fragName:str="FRAG_4_HEXA-up",wordlist:bool=False,keyToFind:str=None):
+def writer(keySize: int,
+           cores: int,
+           fragName: str = "FRAG_4_HEXA-up",
+           wordlist: bool = False,
+           keyToFind: str = None):
     """
     Writing output:
 
@@ -616,12 +673,13 @@ def writer(keySize:int,cores:int,fragName:str="FRAG_4_HEXA-up",wordlist:bool=Fal
 
     # Updating parameters if a key has been passed as argument for finding.
     if keyToFind:
-        keyToFind = keyToFind.replace("-","")
+        #keyToFind = keyToFind.replace("-","")
         keySize = len(keyToFind)
 
-        print(f"You have provided a {keySize} length key's to test ({keyToFind}).")
+        print(
+            f"You have provided a {keySize} length key's to test ({keyToFind})."
+        )
         print("The parameters will be automatically adapted to the said key.")
-        
 
         fragName = "FRAG_4_"
 
@@ -643,7 +701,7 @@ def writer(keySize:int,cores:int,fragName:str="FRAG_4_HEXA-up",wordlist:bool=Fal
             tail += "-True"
         else:
             tail += "-False"
-        
+
         fragName += tail
         print(f"The generation will proceed with parameters: {tail}\n")
     #
@@ -652,47 +710,53 @@ def writer(keySize:int,cores:int,fragName:str="FRAG_4_HEXA-up",wordlist:bool=Fal
 
     nOf4 = numberOf4Fragments(keySize)
 
-    nOf2 = numberOfCharRemaining(keySize) - 1
-    if nOf2 == -1:
-        nOf2 = 0
+    nOf2 = numberOfCharRemaining(keySize)
 
-    print(f">The generated key is composed of {nOf4} fragments of 4 and {nOf2} of 2 !")
+    print(
+        f">The generated key is composed of {nOf4} fragments of 4 and {nOf2} remaining chars !"
+    )
     print(f">{fragName} ...")
     fragL4 = list(handleFragments(fragName))
     lFragL4 = len(fragL4)
-    print(f"Fragments {fragName} have been created and contains {readableDigits(lFragL4)} elements !")
+    print(
+        f"Fragments {fragName} have been created and contains {readableDigits(lFragL4)} elements !"
+    )
 
-    if  nOf2 > 0:
-        frag2Name = "FRAG_2_"+fragName.split("_")[-1]
+    if nOf2 > 0:
+        frag2Name = "FRAG_2_" + fragName.split("_")[-1]
         print(f">{frag2Name} ...")
         fragL2 = list(handleFragments(frag2Name))
         lFragL2 = len(fragL2)
-        print(f"Fragments {frag2Name} have been created and contains {readableDigits(lFragL2)} elements !")
+        print(
+            f"Fragments {frag2Name} have been created and contains {readableDigits(lFragL2)} elements !"
+        )
     else:
         fragL2 = []
         lFragL2 = 0
 
-    fragL = [fragL4,fragL2]
+    fragL = [fragL4, fragL2]
 
     print("\nAll fragments have been generated, computing will start now !")
     print("You have 3 seconds to read this.")
     time.sleep(3)
 
     clear(withAscii=True)
-    
-    if (lFragL2  > 100000 or lFragL4  > 100000):
+
+    if (lFragL2 > 100000 or lFragL4 > 100000):
         possibilities = "<Woh this number is too huge to being compute easly>"
     else:
-        possibilities = arrangement(lFragL4,nOf4) * arrangement(lFragL2,nOf2)
+        possibilities = arrangement(lFragL4, nOf4) * arrangement(lFragL2, nOf2)
 
-    print(f"With each generation, you have a 1 in {readableDigits(possibilities)} chance of finding the right key. Good luck !\n")
+    print(
+        f"With each generation, you have a 1 in {readableDigits(possibilities)} chance of finding the right key. Good luck !\n"
+    )
 
     if wordlist:
-        multiprocWriter(cores=cores,fragName=fragName,keySize=keySize,fragmentList=fragL,keyToFind=keyToFind,possibilities=possibilities)
+        multiprocWriter(cores=cores,
+                        fragName=fragName,
+                        keySize=keySize,
+                        fragmentList=fragL,
+                        keyToFind=keyToFind,
+                        possibilities=possibilities)
     else:
-        consoleWriter(keySize=keySize,fragmentList=fragL,keyToFind=keyToFind)
-            
-
-
-
-
+        consoleWriter(keySize=keySize, fragmentList=fragL, keyToFind=keyToFind)

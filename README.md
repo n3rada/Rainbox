@@ -50,7 +50,7 @@ python3 rainbox.py -tf BCE6-C5B8-547C-2FA3-57F4-9DB5-9DE7-F9 -w
   <img src="ressources/images/finded_in_wordlist.gif" alt="animated" />
 </p>
 
-As an example, the key was found at line 17.079.929 of the [wordlist](ressources/files/wordlists/hexa/HEXA-up-False-30-keys.txt).
+As an example, the key was found at line 17.079.929 of the wordlist.
 
 *Each launch will increase the size of the corresponding wordlist !*
 

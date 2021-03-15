@@ -11,10 +11,11 @@
                        I can't be held responsible for possible misuse of this software.
 
 
-`Rainbox` is a generator of wifi router keys from major French manufacturers (i.e. Bouygues Telecom, Orange, SFR, Free).
+`Rainbox` is a generator of wifi router keys from major French manufacturers (i.e. Bouygues Telecom, Orange, SFR).
 
-Read this in other languages: [French](README.fr.md)
+[black](https://github.com/psf/black) was used to check the formatting of the code.
 
+Carried out in accordance with [PEP8](https://www.python.org/dev/peps/pep-0008/)
 ## About
 Based on the collection of various router security keys, the purpose of this generator is to understand the typical security key pattern and to show that it can be exploited to create a suitable generator. Although, you will notice that most of the time, the chance to find the right key is not very big. <br/>
 
@@ -36,13 +37,22 @@ python3 rainbox.py -t alpha -a mix -l 30
 ```
 python3 rainbox.py -c 4 -t hexa -a up -l 18 -w True
 ```
-* To increase your personal word list and searching for a specific key:
+* To increase your personal word list and searching for a specific key: <br/>
+
+*Here, the aim is to create a specific file where the created keys will be stored.<br/>
+Once the process has been stopped by the user, the tool will look for the presence of the key to be tested within the file. <br/> 
+If it finds it, it will show you the line as well as generation statistics on this file.<br/>*
+
 ```
-python3 rainbox.py -tf <YouKey> -w
+python3 rainbox.py -tf BCE6-C5B8-547C-2FA3-57F4-9DB5-9DE7-F9 -w
 ```
 <p align="center">
   <img src="ressources/images/finded_in_wordlist.gif" alt="animated" />
 </p>
+
+As an example, the key was found at line 17.079.929 of the [wordlist](ressources/files/wordlists/hexa/HEXA-up-False-30-keys.txt).
+
+*Each launch will increase the size of the corresponding wordlist !*
 
 * If you want to test in how much time the generator can find your personal key:
 ```
@@ -90,7 +100,7 @@ Multiprocessing gives rise to the **problem of sharing global variables between 
 I therefore preferred to "carry " the "fragL" variable between each function rather than trying to have it defined among each process. Maybe there would be a better solution here.
 
 ## Samples analysis
-Based on the keys I have been able to observe, at the date I am writing this (2021) the French [ISPs](https://en.wikipedia.org/wiki/Internet_service_provider) proceed as follows:
+Based on the keys I have been able to observe, at the date I am writing this (Jan.2021) the French [ISPs](https://en.wikipedia.org/wiki/Internet_service_provider) proceed as follows:
 
 * **Bouygues-Telecom** : 30 hexanumeric characters keys for ADSL 
 * **Orange** : 26 hexanumeric characters keys for ADSL and 18 mixed alphanumeric characters keys for Fiber Optic
@@ -98,6 +108,13 @@ Based on the keys I have been able to observe, at the date I am writing this (20
 * **Free** : Seems to have no logic at all !
 
 *They are all case-sensitive.*
+
+## Improvments 
+* Due to the fact that the Free keys contain dashes "-" and that they matter in the key verification, the code should be adapted accordingly.
+
+## Disclaimer
+**Because some people will surely argue**, this has not been designed or developed with reverse engineering intentions ! Here, the aim is to improve wordlist search and creation by adapting it to the context. The aim is to mathematically reduce the probability of generation by applying the principles of generation as stated above.
+It's like using [Crunch](https://tools.kali.org/password-attacks/crunch) but in better.
 
 ## Author 
 **[Azaël MARTIN](https://www.linkedin.com/in/n3rada)** - [n3rada](https://github.com/n3rada)

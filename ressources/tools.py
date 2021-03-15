@@ -4,6 +4,7 @@
 import os, sys
 import re
 import random as rd
+import string
 import time, datetime
 import math
 
@@ -22,13 +23,22 @@ DIRECTORY_ALPHA = os.path.join(DIRECTORY_WORDLISTS, "alpha/")
 
 def readableDigits(s):
     try:
-        return format(int(s), ',').replace(',', '.')
+        return format(int(s), ",").replace(",", ".")
     except:
         return s
 
 
-isStringTrue = lambda s: s.lower(
-) in ['true', '1', 't', 'y', 'yes', 'yeah', 'yup', 'certainly', 'uh-huh']
+isStringTrue = lambda s: s.lower() in [
+    "true",
+    "1",
+    "t",
+    "y",
+    "yes",
+    "yeah",
+    "yup",
+    "certainly",
+    "uh-huh",
+]
 
 ##########################################
 ##########################################
@@ -38,11 +48,11 @@ from typing import Iterator
 
 def createFragments(inputList, letters: int = 4) -> Iterator:
     """
-    Generator to create fragments of number of letters from inputList. 
+    Generator to create fragments of number of letters from inputList.
     """
     for elt in itertools.product(inputList, repeat=letters):
         # If the fragment contains more than maxRep letters
-        frag = ''.join(elt)
+        frag = "".join(elt)
 
         # No words with 3 times the same letter / number
         regex = r"^(?:(\w)\1?(?!\1))+$"
@@ -73,7 +83,7 @@ def isHexa(string: str):
     """
     for ch in string:
 
-        if ((ch < '0' or ch > '9') and (ch < 'A' or ch > 'F')):
+        if (ch < "0" or ch > "9") and (ch < "A" or ch > "F"):
             return False
 
     return True
@@ -83,7 +93,7 @@ def isPunctuated(s: str):
     """
     Check if a string contains punctuations.
     """
-    import string
+
     for ch in s:
         if ch in string.punctuation:
             return True
@@ -126,13 +136,14 @@ def clear(withAscii: bool = True):
     """
     Clearing the screen.
     """
-    if os.name == 'nt':
+    if os.name == "nt":
         os.system("cls")
     else:
         os.system("clear")
 
     if withAscii:
-        print("""
+        print(
+            """
                                         ██████╗  █████╗ ██╗███╗   ██╗██████╗  ██████╗ ██╗  ██╗
                                         ██╔══██╗██╔══██╗██║████╗  ██║██╔══██╗██╔═══██╗╚██╗██╔╝
                                         ██████╔╝███████║██║██╔██╗ ██║██████╔╝██║   ██║ ╚███╔╝ 
@@ -141,19 +152,20 @@ def clear(withAscii: bool = True):
                                         ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝
                                                     A generator of wifi router keys
                                                             Author: n3rada
-                """)
+                """
+        )
 
 
 def countLines(file_path):
     count = 0
     chunkSize = 8192 * 1024
 
-    with open(file_path, 'rb') as fh:
+    with open(file_path, "rb") as fh:
         while True:
             buffer = fh.read(chunkSize)
             if not buffer:
                 break
-            count += buffer.count(b'\n')
+            count += buffer.count(b"\n")
     return count
 
 
@@ -177,7 +189,7 @@ def isStringInFile(fullPath: str, string: str):
     Return tuple saying if string is into the file and in which line.
     """
     lines = 1
-    with open(fullPath, 'r') as f:
+    with open(fullPath, "r") as f:
         for line in f:
             if string in line:
                 return (True, lines)
@@ -200,6 +212,7 @@ def mergeFiles(fullNameNew: str, filenames: list):
     Merge all files "filenames" from directory in a new file.
     """
     import shutil
+
     with open(fullNameNew, "ab") as outputF:
         for file in filenames:
             with open(file, "rb") as inputF:
@@ -257,6 +270,7 @@ def writeVarToFile(var: object, name: str, directory=DIRECTORY_FILES):
 def extractVarFromFile(fileName: str, directory=DIRECTORY_FILES):
     """Extract variable contenant's from file."""
     import ast
+
     with open(directory + fileName, "r+") as f:
         contents = f.read()
         try:
@@ -281,7 +295,7 @@ def mergedSamples():
 
             for line in f:
                 line = line.strip().split(sep="|")[0]
-                merged.append(''.join([elt.upper() for elt in line]))
+                merged.append("".join([elt.upper() for elt in line]))
 
     return merged
 
@@ -316,9 +330,9 @@ def handleFragments(fragName: str):
 
     Available generators: FRAG_2_HEXA, FRAG_2, FRAG_4_HEXA, FRAG_4
     Both with mixed, lower and upper case as "low","up","mix"
-    To specify cases use : handleFragments("FRAG_2_HEXA","low") 
+
+    Automatically handle punctuation if "True" is present in fragment naming's.
     """
-    import string
 
     # "FRAG_4-up-True" => ("FRAG_4","up","True")
     fragName, case, punctuation = fragName.split("-")
@@ -327,24 +341,24 @@ def handleFragments(fragName: str):
     case = case.lower()
 
     if isStringTrue(punctuation):
-        # Ponctuations vues dans certains codes wifi
+        # Punctuation seen in some wifi codes
         base = string.digits + "."
     else:
         base = string.digits
 
     if fragName == "FRAG_2_HEXA":
         if case == "low":
-            return createFragments(base + 'abcdef', letters=2)
+            return createFragments(base + "abcdef", letters=2)
         elif case == "up":
-            return createFragments(base + 'ABCDEF', letters=2)
+            return createFragments(base + "ABCDEF", letters=2)
         elif case == "mix":
             return createFragments(string.hexdigits, letters=2)
 
     elif fragName == "FRAG_4_HEXA":
         if case == "low":
-            return createFragments(base + 'abcdef', letters=4)
+            return createFragments(base + "abcdef", letters=4)
         elif case == "up":
-            return createFragments(base + 'ABCDEF', letters=4)
+            return createFragments(base + "ABCDEF", letters=4)
         elif case == "mix":
             return createFragments(string.hexdigits, letters=4)
 
@@ -371,8 +385,9 @@ def choose2Fragments(fragL, stockList=[]) -> tuple:
     """
 
     word1, word2 = rd.choice(fragL), rd.choice(fragL)
-    while (word1 in stockList
-           or word2 in stockList) or (word1.isnumeric() and word2.isnumeric()):
+    while (word1 in stockList or word2 in stockList) or (
+        word1.isnumeric() and word2.isnumeric()
+    ):
         word1, word2 = rd.choice(fragL), rd.choice(fragL)
 
     # Never two digital fragments that follow each other
@@ -414,7 +429,7 @@ def generateKey(length: int, fragments: list):
     frag4 = numberOf4Fragments(length)
     others = numberOfCharRemaining(length)
 
-    #print(f"{length} key = {frag4} frag-4 + {others} chars.")
+    # print(f"{length} key = {frag4} frag-4 + {others} chars.")
 
     fragL4, fragL2 = fragments
 
@@ -433,7 +448,7 @@ def generateKey(length: int, fragments: list):
 
             finalWord += word1 + word2
 
-            #print("Adding 2 frag4.")
+            # print("Adding 2 frag4.")
             count4 += 2
 
         else:
@@ -442,7 +457,7 @@ def generateKey(length: int, fragments: list):
 
             finalWord += word
 
-            #print("Adding 1 frag4.")
+            # print("Adding 1 frag4.")
             count4 += 1
 
     if others:
@@ -457,7 +472,7 @@ def generateKey(length: int, fragments: list):
 
                 finalWord += word
 
-                #print("Adding 1 frag2.")
+                # print("Adding 1 frag2.")
                 countO += 2
             else:
                 word = choose1Fragment(fragL4, stockList=alreadyPickedUp)
@@ -471,7 +486,7 @@ def generateKey(length: int, fragments: list):
 
                 finalWord += word
 
-                #print("Adding 1 cutted frag4.")
+                # print("Adding 1 cutted frag4.")
                 countO += 1
 
     return finalWord
@@ -484,6 +499,7 @@ def infiniteKeysGenerator(length: int, fragments: list):
 
 def init_worker():
     import signal
+
     signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 
@@ -493,15 +509,21 @@ def workerWriter(fileName: str, fragList: list, keySize: int):
     """
     with open(fileName, "w+") as f:
         try:
-            for key in infiniteKeysGenerator(length=keySize,
-                                             fragments=fragList):
+            for key in infiniteKeysGenerator(length=keySize, fragments=fragList):
                 f.write(f"{key}\n")
         except KeyboardInterrupt:
             f.close()
 
 
-def multiprocWriter(cores: int, fragName: str, keySize: int,
-                    fragmentList: list, keyToFind: str, possibilities: int):
+def multiprocWriter(
+    cores: int,
+    fragName: str,
+    keySize: int,
+    fragmentList: list,
+    keyToFind: str,
+    possibilities: int,
+):
+
     import multiprocessing as mp
 
     poule = mp.Pool(cores, init_worker)
@@ -519,16 +541,18 @@ def multiprocWriter(cores: int, fragName: str, keySize: int,
     finalName = directory + name + ".txt"
     ##############
 
-    data = [(f"{bufferName}-{i}.txt", fragmentList, keySize)
-            for i in range(cores)]
+    data = [(f"{bufferName}-{i}.txt", fragmentList, keySize) for i in range(cores)]
 
     print(
         "\n\t\t\t\t  --> Use keyboard interrupt command to stop the generating process <--"
     )
 
     starting = time.time()
+
     try:
-        poule.starmap(workerWriter, data)
+        poule.starmap(
+            workerWriter, data
+        )  # We need blocking process here, so no "async"
 
     except KeyboardInterrupt:
 
@@ -548,7 +572,11 @@ def multiprocWriter(cores: int, fragName: str, keySize: int,
         if isFileHere(fullPath=finalName):
             previousLines = countLines(file_path=finalName)
 
-        mergeFiles(finalName, [f"{bufferName}-{i}.txt" for i in range(cores)])
+        createdBuffers = [
+            DIRECTORY_BUFFER + file for file in whatInThere(directory=DIRECTORY_BUFFER)
+        ]
+
+        mergeFiles(finalName, createdBuffers)
         eraseAllFromDir(directory=DIRECTORY_BUFFER)
 
         total = countLines(file_path=finalName)
@@ -562,33 +590,32 @@ def multiprocWriter(cores: int, fragName: str, keySize: int,
                 print(
                     f"You key ({keyToFind}) have been found during the generating process !"
                 )
-                print(
-                    f"It's at line {readableDigits(line)} into the file {finalName}."
-                )
+                print(f"It's at line {readableDigits(line)} into the file {finalName}.")
             else:
                 print(
-                    f"Among all {readableDigits(line)} keys of the file, no key like yours appears..."
+                    f"Among all {readableDigits(lines)} keys of the file, no key like yours appears..."
                 )
 
         timeMesure = datetime.timedelta(seconds=elapsed)
 
         gigas = os.path.getsize(finalName) / (1024 * 1024 * 1024)
 
-        keysPerGiga = floor(line / gigas)
+        keysPerGiga = floor(lines / gigas)
 
-        print(f"\nEach Giga represents {readableDigits(keysPerGiga)} keys.")
         print(
-            f"Approximately {readableDigits(keysPerSeconds)} keys were generated per second."
+            f"\nFor a total of {readableDigits(total)} keys availables into the {gigas} Gigabyte wordlist :"
+        )
+
+        print(f"> Each Giga represents {readableDigits(keysPerGiga)} keys.")
+        print(
+            f"> Approximately {readableDigits(keysPerSeconds)} keys were generated per second."
         )
         print(
-            f"{readableDigits(lines)} keys have been added in {timeMesure} to the {readableDigits(previousLines)} keys already present into the wordlist."
-        )
-        print(
-            f"For a total of {readableDigits(total)} keys availables into the {gigas} Gigabyte wordlist.\n"
+            f"> {readableDigits(lines)} keys have been added in {timeMesure} to the {readableDigits(previousLines)} keys already present into the wordlist."
         )
 
         if isinstance(possibilities, int):
-            timeOfCalc = (possibilities / keysPerSeconds)
+            timeOfCalc = possibilities / keysPerSeconds
 
             try:
                 timeF = datetime.timedelta(seconds=timeOfCalc)
@@ -599,9 +626,7 @@ def multiprocWriter(cores: int, fragName: str, keySize: int,
             print(
                 f"Thus, you would need a {possibilities/keysPerGiga} Gigabyte wordlist to have all the possibilities."
             )
-            print(
-                f"This is equivalent to {timeF} of calculation with this power.\n"
-            )
+            print(f"This is equivalent to {timeF} of calculation with this power.\n")
 
         sys.exit(0)
 
@@ -612,14 +637,11 @@ def consoleWriter(keySize: int, fragmentList: list, keyToFind: str):
 
     try:
         if not keyToFind:
-            for key in infiniteKeysGenerator(length=keySize,
-                                             fragments=fragmentList):
+            for key in infiniteKeysGenerator(length=keySize, fragments=fragmentList):
                 print(key)
                 count += 1
         else:
-            print(
-                f"The generator will generate keys until he finds yours: {keyToFind}"
-            )
+            print(f"The generator will generate keys until he finds yours: {keyToFind}")
             print(
                 f"Only the keys corresponding to more than 50% with yours will be displayed."
             )
@@ -627,8 +649,7 @@ def consoleWriter(keySize: int, fragmentList: list, keyToFind: str):
                 f"The generation above is infinite, use the keyboard interrupt to stop it."
             )
 
-            for key in infiniteKeysGenerator(length=keySize,
-                                             fragments=fragmentList):
+            for key in infiniteKeysGenerator(length=keySize, fragments=fragmentList):
                 match = percentageMatch(key, keyToFind)
                 count += 1
 
@@ -641,49 +662,52 @@ def consoleWriter(keySize: int, fragmentList: list, keyToFind: str):
                         print(f"{key} =/= {keyToFind} | Matching : {match}")
 
     except KeyboardInterrupt:
-        #clear()
+        # clear()
         ended = time.time()
         elapsed = ended - starting
 
         keysPerSeconds = floor(count / elapsed)
 
         timeMesure = datetime.timedelta(seconds=elapsed)
+
         print(f"\n{timeMesure} elapsed !")
         print(
             f"Approximately {readableDigits(keysPerSeconds)} keys were generated per second (with one core)."
         )
+
         sys.exit(0)
 
 
-def writer(keySize: int,
-           cores: int,
-           fragName: str = "FRAG_4_HEXA-up",
-           wordlist: bool = False,
-           keyToFind: str = None):
+def writer(
+    keySize: int,
+    cores: int,
+    fragName: str = "FRAG_4_HEXA-up",
+    wordlist: bool = False,
+    keyToFind: str = None,
+):
     """
     Writing output:
-
-    If not wordlist:
-        One core into standard output
-    else:
-        Multiprocessed writing process during "till" seconds.
+        If not wordlist:
+            One core into standard output
+        else:
+            Multiprocessed writing process during "till" seconds.
 
     keyToFind: arg to pass if you want to test your key.
     """
 
     # Updating parameters if a key has been passed as argument for finding.
     if keyToFind:
-        #keyToFind = keyToFind.replace("-","")
+        keyToFind = keyToFind.replace("-", "")
         keySize = len(keyToFind)
 
-        print(
-            f"You have provided a {keySize} length key's to test ({keyToFind})."
-        )
+        print(f"You have provided a {keySize} length key's to test ({keyToFind}).")
         print("The parameters will be automatically adapted to the said key.")
 
         fragName = "FRAG_4_"
 
         tail = ""
+
+        print(keyToFind)
 
         if isHexa(keyToFind):
             tail += "HEXA"
@@ -704,7 +728,6 @@ def writer(keySize: int,
 
         fragName += tail
         print(f"The generation will proceed with parameters: {tail}\n")
-    #
 
     print(f"Creating Fragments list:\n")
 
@@ -713,11 +736,13 @@ def writer(keySize: int,
     nOf2 = numberOfCharRemaining(keySize)
 
     print(
-        f">The generated key is composed of {nOf4} fragments of 4 and {nOf2} remaining chars !"
+        f"> The generated key is composed of {nOf4} fragments of 4 and {nOf2} remaining chars !"
     )
     print(f">{fragName} ...")
+
     fragL4 = list(handleFragments(fragName))
     lFragL4 = len(fragL4)
+
     print(
         f"Fragments {fragName} have been created and contains {readableDigits(lFragL4)} elements !"
     )
@@ -725,8 +750,10 @@ def writer(keySize: int,
     if nOf2 > 0:
         frag2Name = "FRAG_2_" + fragName.split("_")[-1]
         print(f">{frag2Name} ...")
+
         fragL2 = list(handleFragments(frag2Name))
         lFragL2 = len(fragL2)
+
         print(
             f"Fragments {frag2Name} have been created and contains {readableDigits(lFragL2)} elements !"
         )
@@ -738,12 +765,13 @@ def writer(keySize: int,
 
     print("\nAll fragments have been generated, computing will start now !")
     print("You have 3 seconds to read this.")
+
     time.sleep(3)
 
     clear(withAscii=True)
 
-    if (lFragL2 > 100000 or lFragL4 > 100000):
-        possibilities = "<Woh this number is too huge to being compute easly>"
+    if lFragL2 > 100000 or lFragL4 > 100000:
+        possibilities = "< Woh this number is too huge to being compute easly >"
     else:
         possibilities = arrangement(lFragL4, nOf4) * arrangement(lFragL2, nOf2)
 
@@ -752,11 +780,14 @@ def writer(keySize: int,
     )
 
     if wordlist:
-        multiprocWriter(cores=cores,
-                        fragName=fragName,
-                        keySize=keySize,
-                        fragmentList=fragL,
-                        keyToFind=keyToFind,
-                        possibilities=possibilities)
+        eraseAllFromDir(directory=DIRECTORY_BUFFER)  # To be sure than buffer is empty
+        multiprocWriter(
+            cores=cores,
+            fragName=fragName,
+            keySize=keySize,
+            fragmentList=fragL,
+            keyToFind=keyToFind,
+            possibilities=possibilities,
+        )
     else:
         consoleWriter(keySize=keySize, fragmentList=fragL, keyToFind=keyToFind)
